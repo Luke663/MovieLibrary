@@ -1,0 +1,145 @@
+﻿<UserControl x:Class="MovieLibrary.Views.HomePageView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" d:DesignHeight="660" d:DesignWidth="980">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Margin="50,0,0,0" Text="Movie Library" Foreground="White" FontSize="36" FontWeight="Bold" VerticalAlignment="Center"/>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.4*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="70"/>
+                </Grid.RowDefinitions>
+
+                <Button Grid.Row="0" Margin="20,20,0,0" BorderThickness="0,0,0,0" Cursor="Hand"
+                        ToolTip="{Binding RandomMovie.Title}" Command="{Binding ViewEntryCommand}" CommandParameter="{Binding RandomMovie.Title}">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <Border x:Name="bg" Background="{TemplateBinding Background}" BorderThickness="0" BorderBrush="#f9f900">
+                                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                                                              VerticalAlignment="{TemplateBinding VerticalAlignment}" />
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="BorderThickness" Value="5" TargetName="bg" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="4"/>
+                            <Setter Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect ShadowDepth="2" />
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Resources>
+
+                    <TextBlock Text="{Binding RandomMovie.Title}" Visibility="Hidden"/>
+
+                    <Button.Background>
+                        <ImageBrush ImageSource="{Binding RandomMovie.Path}"/>
+                    </Button.Background>
+                </Button>
+
+                <TextBlock Grid.Row="1" Text="Random Movie" VerticalAlignment="Top" HorizontalAlignment="Center" Foreground="White" FontSize="20"/>
+            </Grid>
+
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="70"/>
+                    <RowDefinition Height="70"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Margin="20" Text="Search:" VerticalAlignment="Center" HorizontalAlignment="Center"
+                               Foreground="White" FontSize="18" FontWeight="Bold"/>
+                    <TextBox x:Name="SearchTextbox" Grid.Column="1" Margin="0,20,10,20" VerticalContentAlignment="Center" Background="#FF1F1D1D"
+                             Foreground="White" Padding="4,0,0,0" FontSize="14" BorderThickness="2">
+
+                        <!--Allow search to be started with Enter key-->
+                        <TextBox.InputBindings>
+                            <KeyBinding Gesture="Enter" Command="{Binding SearchTitleCommand}" CommandParameter="{Binding Text, ElementName=SearchTextbox}"/>
+                        </TextBox.InputBindings>
+                    </TextBox>
+                    <Button Grid.Column="2" Margin="10,20,10,20" Content="Search" FontSize="13" Style="{StaticResource RoundedButton}"
+                            Command="{Binding SearchTitleCommand}" CommandParameter="{Binding Text, ElementName=SearchTextbox}"/>
+                </Grid>
+
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Margin="20" Text="Add:" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White"
+                               FontSize="18" FontWeight="Bold"/>
+                    <TextBox x:Name="AddTextbox" Grid.Column="1" Margin="0,20,10,20" VerticalContentAlignment="Center" Background="#FF1F1D1D"
+                             Foreground="White" Padding="4,0,0,0" FontSize="14" FontStyle="Italic" BorderThickness="2">
+                        
+                        <!--Allow Scrape initiation (add movie) with Enter key-->
+                        <TextBox.InputBindings>
+                            <KeyBinding Gesture="Enter" Command="{Binding AddMovieCommand}" CommandParameter="{Binding Text, ElementName=AddTextbox}"/>
+                        </TextBox.InputBindings>
+                    </TextBox>
+                    
+                    <Button Grid.Column="2" Margin="10,20,10,20" Content="Go" FontSize="13" Style="{StaticResource RoundedButton}"
+                            Command="{Binding AddMovieCommand}" CommandParameter="{Binding Text, ElementName=AddTextbox}"/>
+                </Grid>
+
+                <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Text="Genres:" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontSize="17"/>
+
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.2*"/>
+                            <ColumnDefinition Width="0.6*"/>
+                            <ColumnDefinition Width="0.2*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <ListBox Grid.Column="1" Margin="20,5,20,20" Background="#FF1F1D1D" Foreground="White" HorizontalContentAlignment="Stretch"
+                                 ItemsSource="{Binding GenreList}" ItemTemplate="{StaticResource GenreDatatemplate}" BorderThickness="2" Padding="0,3,0,0" FontSize="13"/>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <Button Grid.Row="2" Content="View All" Width="190" HorizontalAlignment="Right" Style="{StaticResource RoundedButton}" Command="{Binding GoToViewAllCommand}"/>
+    </Grid>
+</UserControl>

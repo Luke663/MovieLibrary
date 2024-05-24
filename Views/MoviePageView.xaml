@@ -1,0 +1,109 @@
+﻿<UserControl x:Class="MovieLibrary.Views.MoviePageView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" d:DesignHeight="660" d:DesignWidth="980">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.3*"/>
+                <ColumnDefinition Width="0.5*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.7*"/>
+                    <RowDefinition Height="0.35*"/>
+                </Grid.RowDefinitions>
+
+                <Image Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Source="{Binding Path}"/>
+
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" Text="Score: " HorizontalAlignment="Right" FontSize="30" Foreground="LawnGreen"/>
+                        <TextBlock Grid.Column="1" Text="{Binding Score}" HorizontalAlignment="Left" FontSize="30" Foreground="LawnGreen"/>
+                    </Grid>
+                    
+                    <TextBlock Grid.Row="1" Text="Date:" Foreground="Cornsilk" Padding="40,10,0,0" FontSize="17"/>
+                    <TextBlock Grid.Row="2" Text="{Binding Date}" HorizontalAlignment="Center" Foreground="Cornsilk" FontSize="14" Padding="0,0,0,0"/>
+                    
+                    <TextBlock Grid.Row="3" Text="Genres:" Foreground="Cornsilk" Padding="40,10,0,0" FontSize="17"/>
+                    <TextBlock Grid.Row="4" Text="{Binding GenreString}" HorizontalAlignment="Center" Foreground="Cornsilk" FontSize="14" Padding="0,0,0,0"/>
+                </Grid>
+            </Grid>
+
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.07*"/>
+                    <RowDefinition Height="0.2*"/>
+                    <RowDefinition Height="0.7*"/>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="60"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Text="{Binding Duration}" Foreground="LawnGreen" FontSize="17" FontWeight="Bold"/>
+                <TextBlock Grid.Row="0" Text="{Binding AgeRating}" Foreground="Red" FontSize="25" FontWeight="Bold" HorizontalAlignment="Right" Padding="0,0,20,0"/>
+
+                <Viewbox Stretch="Uniform" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1">
+                    <TextBlock Text="{Binding Title}" Margin="5" Foreground="White" FontWeight="Bold"/>
+                </Viewbox>
+
+                <ScrollViewer Margin="10" Grid.Row="2" Background="#FF1F1D1D" VerticalScrollBarVisibility="Auto" BorderBrush="White" BorderThickness="2">
+                    <TextBlock Margin="10" Foreground="White" FontSize="14" Text="{Binding Description}" TextWrapping="Wrap"/>
+                </ScrollViewer>
+
+                <Grid Grid.Row="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.2*"/>
+                        <ColumnDefinition Width="0.8*"/>
+                        <ColumnDefinition Width="0.2*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Notes:" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="18"/>
+                    
+                    <TextBox Grid.Column="1" Margin="10" Foreground="White" Background="#FF1F1D1D" BorderBrush="White" BorderThickness="2" FontSize="14"
+                             Padding="4,0,0,0" VerticalContentAlignment="Center" Text="{Binding Note, UpdateSourceTrigger=PropertyChanged}"/>
+                    
+                    <Button Grid.Column="2" Content="Update" FontSize="13"  Style="{StaticResource RoundedButton}"
+                            Command="{Binding UpdateNoteCommand}" CommandParameter="{Binding MovieToView}"/>
+                </Grid>
+
+                <Grid Grid.Row="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="210"/>
+                        <ColumnDefinition Width="210"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0" Content="Delete Entry" Background="Red" FontSize="12.5" Style="{StaticResource RoundedButton}"
+                            Command="{Binding DeleteMovieCommand}" CommandParameter="{Binding Title}"/>
+
+                    <Button Grid.Column="2" Content="Back" Command="{Binding GoBackCommand}" Style="{StaticResource RoundedButton}"/>
+
+                    <Button Grid.Column="3" Content="Home" Command="{Binding NavigateHomeCommand}" Style="{StaticResource RoundedButton}"/>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

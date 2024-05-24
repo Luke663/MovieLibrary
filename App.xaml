@@ -1,0 +1,266 @@
+﻿<Application x:Class="MovieLibrary.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:views="clr-namespace:MovieLibrary.Views"
+             xmlns:models="clr-namespace:MovieLibrary.Models"
+             xmlns:viewModels="clr-namespace:MovieLibrary.ViewModels">
+    
+    <Application.Resources>
+        <ResourceDictionary>
+
+            <!--View/ViewModel Bindings-->
+            <DataTemplate DataType="{x:Type viewModels:HomePageViewModel}">
+                <views:HomePageView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModels:SearchPageViewModel}">
+                <views:SearchPageView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModels:MoviePageViewModel}">
+                <views:MoviePageView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModels:ViewAllPageViewModel}">
+                <views:ViewAllPageView/>
+            </DataTemplate>
+            
+            
+            
+            <!--Rounded Button Style-->
+            <Style TargetType="Button" x:Key="RoundedButton">
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="Background" Value="#FF1F1D1D"/>
+                <Setter Property="BorderBrush" Value="White"/>
+                <Setter Property="BorderThickness" Value="3"/>
+                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="Margin" Value="10"/>
+
+                <Style.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="15" />
+                    </Style>
+                </Style.Resources>
+            </Style>
+
+            
+            
+            <!--Overiding of ListBoxItem to allow desired behaviour-->
+            <Style TargetType="{x:Type ListBoxItem}">
+                <Style.Resources>
+                    <!-- Use your own colors here if you want, or do it per class -->
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#2e2e2e"/>
+                    <!--#FFFFA500"/>-->
+                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey }" Color="#2e2e2e"/>
+                </Style.Resources>
+
+                <Setter Property="Template">
+                    <!-- Revert the Template in Windows 10 to match the Windows 7 template that used "SystemColors.HighlightBrushKey" and such-->
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                            <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
+                                    Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsSelected" Value="true">
+                                    <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsSelected" Value="true"/>
+                                        <Condition Property="Selector.IsSelectionActive" Value="false"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}}"/>
+                                </MultiTrigger>
+                                <Trigger Property="IsEnabled" Value="false">
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            
+            
+            
+            <!--View all page result template-->
+            <DataTemplate DataType="{x:Type viewModels:MovieViewModel}" x:Key="ViewAllTileTemplate">
+                <Button Width="140" Height="190" Margin="7" BorderThickness="0,0,0,0" Cursor="Hand" ToolTip="{Binding Title}"
+                        Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}, Path=DataContext.ViewMovieCommand}"
+                        CommandParameter="{Binding Title}">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <Border x:Name="bg" Background="{TemplateBinding Background}" BorderThickness="0" BorderBrush="#f9f900">
+                                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                                                  VerticalAlignment="{TemplateBinding VerticalAlignment}"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="BorderThickness" Value="5" TargetName="bg" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="4"/>
+                            <Setter Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect ShadowDepth="2" />
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Resources>
+
+                    <!--Content-->
+                    <TextBlock Text="{Binding Title}" Visibility="Hidden"/>
+
+                    <!--Background Image-->
+                    <Button.Background>
+                        <ImageBrush ImageSource="{Binding Path}"/>
+                    </Button.Background>
+                </Button>
+            </DataTemplate>
+            
+            
+            
+            <!--Search result template-->
+            <DataTemplate DataType="{x:Type viewModels:MovieViewModel}" x:Key="SearchResultTemplate">
+                <Border CornerRadius="7" Background="Transparent" Margin="0">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Style.Triggers>
+                                <Trigger Property="Border.IsMouseOver" Value="True">
+                                    <Setter Property="Border.BorderThickness" Value="5"/>
+                                    <Setter Property="Border.BorderBrush" Value="#f9f900"/>
+                                </Trigger>
+                                <Trigger Property="Border.IsMouseOver" Value="False">
+                                    <Setter Property="Border.BorderThickness" Value="5"/>
+                                    <Setter Property="Border.BorderBrush" Value="Transparent"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+
+                    <ListBoxItem Height="125" Margin="0">
+                        <ListBoxItem.Background>
+                            <SolidColorBrush Color="#FF1F1D1D" Opacity=".9" />
+                        </ListBoxItem.Background>
+                        <ListBoxItem.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="5"/>
+                            </Style>
+                        </ListBoxItem.Resources>
+
+                        <ListBoxItem.InputBindings>
+                            <MouseBinding Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Path=DataContext.ViewMovieCommand}"
+                                          CommandParameter="{Binding Title}" Gesture="LeftClick"/>
+                        </ListBoxItem.InputBindings>
+
+                        <Grid Height="120" Margin="-2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="100"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Image Height="115" Width="100" Grid.Column="0" Source="{Binding Path}"/>
+
+                            <Grid Grid.Column="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="20"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="15"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0" Text="{Binding Duration}" FontSize="16" Foreground="LawnGreen" VerticalAlignment="Center" Margin="10,0,0,0"
+                                           Padding="30,0,0,0"/>
+
+                                <StackPanel Grid.Row="1" Name="TitleTextPanel">
+                                    <Viewbox Stretch="Uniform" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1"
+                                             MaxWidth="{Binding ActualWidth, ElementName=TitleTextPanel}"  Height="{Binding ActualHeight, ElementName=TitleTextPanel}">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <TextBlock Text="{Binding Title}" Margin="5" Foreground="White" FontWeight="Bold"/>
+                                        </Grid>
+                                    </Viewbox>
+                                </StackPanel>
+
+                                <TextBlock Grid.Row="2" Text="Released: " FontSize="13" Foreground="Wheat" VerticalAlignment="Center" Padding="30,0,0,0"/>
+                                <TextBlock Grid.Row="2" Text="{Binding Date}" FontSize="13" Foreground="Wheat" VerticalAlignment="Center" Padding="88,0,0,0"/>
+                                <TextBlock Grid.Row="2" Text="{Binding GenreString}" FontSize="13" Foreground="Wheat"  VerticalAlignment="Center"
+                                           HorizontalAlignment="Right" Padding="0,0,30,0"/>
+                            </Grid>
+
+                            <Grid Grid.Column="2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="1" Text="{Binding Score}" Foreground="LawnGreen" FontSize="30" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+                                <TextBlock Grid.Row="1" Text="/10" Foreground="LawnGreen" FontSize="13" VerticalAlignment="Bottom" HorizontalAlignment="Center"
+                                           Padding="60,0,0,5"/>
+                            </Grid>
+                        </Grid>
+                    </ListBoxItem>
+                </Border>
+            </DataTemplate>
+            
+            
+            <!--Genre template for home page-->
+            <DataTemplate DataType="{x:Type models:Genre}" x:Key="GenreDatatemplate">
+                <Border>
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Border.BorderThickness" Value="2"/>
+                            
+                            <Style.Triggers>
+                                <Trigger Property="Border.IsMouseOver" Value="True">
+                                    <Setter Property="Border.BorderBrush" Value="#f9f900"/>
+                                </Trigger>
+                                
+                                <Trigger Property="Border.IsMouseOver" Value="False">
+                                    <Setter Property="Border.BorderBrush" Value="Transparent"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.1*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="0.2*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.InputBindings>
+                            <MouseBinding Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Path=DataContext.ViewGenreCommand}"
+                                          CommandParameter="{Binding Name}" Gesture="LeftClick"/>
+                        </Grid.InputBindings>
+
+                        <TextBlock Grid.Column="1" Text="{Binding Name}"/>
+
+                        <TextBlock Grid.Column="2" HorizontalAlignment="Center" Text="{Binding Movies.Count}"/>
+                    </Grid>
+                </Border>
+            </DataTemplate>
+
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
