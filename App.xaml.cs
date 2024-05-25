@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using MovieLibrary.DbContexts;
 using MovieLibrary.Models;
 using MovieLibrary.Stores;
@@ -10,33 +12,54 @@ namespace MovieLibrary
 {
     public partial class App : Application
     {
-        private readonly LibraryStore _libraryStore;
-        private readonly NavigationStore _navigationStore;
-        private readonly MovieLibraryDbContextFactory _contextFactory;
+        private readonly IHost _host;
 
         public App()
         {
-            _contextFactory = new MovieLibraryDbContextFactory();
-            _libraryStore = new LibraryStore(new Library(_contextFactory));
-            _navigationStore = new NavigationStore();
+            _host = Host.CreateDefaultBuilder().ConfigureServices(services =>
+            {
+                services.AddSingleton<MovieLibraryDbContextFactory>();
 
-            _navigationStore.CurrenViewModel = new HomePageViewModel(_navigationStore, _libraryStore, _contextFactory);
+                services.AddSingleton((s) => new Library(s.GetRequiredService<MovieLibraryDbContextFactory>()));
+                services.AddSingleton((s) => new LibraryStore(_host!));
+
+                services.AddSingleton<NavigationStore>();
+
+                services.AddSingleton((s) => new MainViewModel(s.GetRequiredService<NavigationStore>()));
+                services.AddSingleton((s) => new MainWindow()
+                {
+                    DataContext = s.GetRequiredService<MainViewModel>()
+                });
+            }
+            ).Build();
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
             CheckForPictureDirectory();
 
-            using (MovieLibraryDbContext dbContext = _contextFactory.CreateDbContext())
+            _host.Start();
+
+            using (MovieLibraryDbContext dbContext = _host.Services.GetRequiredService<MovieLibraryDbContextFactory>().CreateDbContext())
                 dbContext.Database.Migrate();
 
-            Window window = new MainWindow()
-            {
-                DataContext = new MainViewModel(_navigationStore)
-            };
-            window.Show();
+            NavigationStore navigation = _host.Services.GetRequiredService<NavigationStore>();
+            navigation.CurrenViewModel = new HomePageViewModel(
+                _host.Services.GetRequiredService<NavigationStore>(),
+                _host.Services.GetRequiredService<LibraryStore>(),
+                _host.Services.GetRequiredService<MovieLibraryDbContextFactory>());
+
+            MainWindow = _host.Services.GetRequiredService<MainWindow>();
+            MainWindow.Show();
 
             base.OnStartup(e);
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            _host.Dispose();
+
+            base.OnExit(e);
         }
 
         private void CheckForPictureDirectory()

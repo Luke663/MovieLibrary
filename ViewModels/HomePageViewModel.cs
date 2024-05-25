@@ -11,14 +11,14 @@ namespace MovieLibrary.ViewModels
         public NavigationStore _navigationStore;
         private readonly LibraryStore _libraryStore;
 
-        public ICommand? SearchTitleCommand { get; }
-        public ICommand? ViewGenreCommand { get; }
-        public ICommand? GoToViewAllCommand { get; }
-        public ICommand? ViewEntryCommand { get; }
-        public ICommand? AddMovieCommand { get; }
+        public ICommand SearchTitleCommand { get; }
+        public ICommand ViewGenreCommand { get; }
+        public ICommand GoToViewAllCommand { get; }
+        public ICommand ViewEntryCommand { get; }
+        public ICommand AddMovieCommand { get; }
 
         public MovieViewModel RandomMovie { get; set; }
-        public List<Genre>? GenreList { get; }
+        public List<Genre> GenreList { get; }
 
         public HomePageViewModel(NavigationStore navigationStore, LibraryStore libraryStore, MovieLibraryDbContextFactory contextFactory)
         {

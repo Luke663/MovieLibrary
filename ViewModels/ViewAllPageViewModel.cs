@@ -2,7 +2,6 @@
 using MovieLibrary.DbContexts;
 using MovieLibrary.Models;
 using MovieLibrary.Stores;
-using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace MovieLibrary.ViewModels
@@ -12,12 +11,10 @@ namespace MovieLibrary.ViewModels
         public ICommand NavigateHomeCommand { get; }
         public ICommand ViewMovieCommand { get; }
 
-        public ViewAllPageViewModel(NavigationStore navigationStore, LibraryStore libraryStore, MovieLibraryDbContextFactory contextFactory) : base(navigationStore, libraryStore)
+        public ViewAllPageViewModel(NavigationStore navigationStore, LibraryStore libraryStore, MovieLibraryDbContextFactory contextFactory) : base(libraryStore)
         {
             NavigateHomeCommand = new GoHomeCommand(navigationStore, libraryStore, contextFactory);
             ViewMovieCommand = new ViewMovieCommand(navigationStore, libraryStore, contextFactory);
-
-            _visibleMovies = new ObservableCollection<MovieViewModel>();
 
             foreach (Movie movie in _libraryStore.Movies)
                 _visibleMovies.Add(new MovieViewModel(movie));

@@ -10,7 +10,7 @@ namespace MovieLibrary.ViewModels
         protected readonly List<string> _filters;
         protected readonly List<string> _sorters;
 
-        protected ObservableCollection<MovieViewModel> _visibleMovies;
+        protected ObservableCollection<MovieViewModel> _visibleMovies = new ObservableCollection<MovieViewModel>();
         protected ObservableCollection<MovieViewModel>? _preFilterMovies = null;
 
         protected string _selectedFilter = "All";
@@ -49,7 +49,7 @@ namespace MovieLibrary.ViewModels
             }
         }
 
-        public ItemCollectionViewerViewModelBase(NavigationStore navigationStore, LibraryStore libraryStore)
+        public ItemCollectionViewerViewModelBase(LibraryStore libraryStore)
         {
             _libraryStore = libraryStore;
 

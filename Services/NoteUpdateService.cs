@@ -17,10 +17,7 @@ namespace MovieLibrary.Services
         {
             using (MovieLibraryDbContext context = _dbContextFactory.CreateDbContext())
             {
-                Movie? movieToAlter = context.Movies.FirstOrDefault(m => m.Id == movie.Id);
-
-                if (movieToAlter == null)
-                    return;
+                Movie movieToAlter = context.Movies.FirstOrDefault(m => m.Id == movie.Id)!;
 
                 movieToAlter.Note = movie.Note;
 

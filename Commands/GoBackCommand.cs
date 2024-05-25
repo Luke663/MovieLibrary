@@ -13,7 +13,7 @@ namespace MovieLibrary.Commands
 
         public override void Execute(object? parameter)
         {
-            _navigationStore.CurrenViewModel = _navigationStore.savedPreviousPage;
+            _navigationStore.CurrenViewModel = _navigationStore.savedPreviousPage!;
             _navigationStore.savedPreviousPage = null;
         }
     }

@@ -1,4 +1,6 @@
-﻿using MovieLibrary.Models;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using MovieLibrary.Models;
 using MovieLibrary.ViewModels;
 
 namespace MovieLibrary.Stores
@@ -13,9 +15,9 @@ namespace MovieLibrary.Stores
         public IEnumerable<Movie> Movies => _movies;
         public IEnumerable<Genre> Genres => _genres;
 
-        public LibraryStore(Library library)
+        public LibraryStore(IHost host)
         {
-            _library = library;
+            _library = host.Services.GetRequiredService<Library>();
 
             (_movies, _genres) = _library.LoadLibrary();
         }

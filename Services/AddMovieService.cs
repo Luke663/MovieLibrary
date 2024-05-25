@@ -74,7 +74,5 @@ namespace MovieLibrary.Services
 
             return genre != null;
         }
-
-
     }
 }

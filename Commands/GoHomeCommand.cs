@@ -19,6 +19,7 @@ namespace MovieLibrary.Commands
 
         public override void Execute(object? parameter)
         {
+            _navigationStore.savedPreviousPage = null;
             _navigationStore.CurrenViewModel = new HomePageViewModel(_navigationStore, _libraryStore, _contextFactory);
         }
     }

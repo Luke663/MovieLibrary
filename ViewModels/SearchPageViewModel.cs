@@ -10,7 +10,7 @@ namespace MovieLibrary.ViewModels
         public ICommand NavigateHomeCommand { get; }
         public ICommand ViewMovieCommand { get; }
 
-        public SearchPageViewModel(NavigationStore navigationStore, LibraryStore libraryStore, List<MovieViewModel> results, List<string> filters, MovieLibraryDbContextFactory contextFactory) : base(navigationStore, libraryStore)
+        public SearchPageViewModel(NavigationStore navigationStore, LibraryStore libraryStore, List<MovieViewModel> results, List<string> filters, MovieLibraryDbContextFactory contextFactory) : base(libraryStore)
         {
             NavigateHomeCommand = new GoHomeCommand(navigationStore, libraryStore, contextFactory);
             ViewMovieCommand = new ViewMovieCommand(navigationStore, libraryStore, contextFactory);
