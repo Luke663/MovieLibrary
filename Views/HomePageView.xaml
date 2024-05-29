@@ -7,25 +7,29 @@
     
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="100"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="60"/>
+            <RowDefinition Height="100"/> <!--Title area-->
+            <RowDefinition Height="*"/> <!--Content area-->
+            <RowDefinition Height="60"/> <!--Footer-->
         </Grid.RowDefinitions>
 
+        <!--Application title-->
         <TextBlock Grid.Row="0" Margin="50,0,0,0" Text="Movie Library" Foreground="White" FontSize="36" FontWeight="Bold" VerticalAlignment="Center"/>
 
+        <!--Content area-->
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.4*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="0.4*"/> <!--Random entry area-->
+                <ColumnDefinition Width="*"/> <!--Search, Add and Genres area-->
             </Grid.ColumnDefinitions>
 
+            <!--Random entry area-->
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="70"/>
+                    <RowDefinition Height="70"/> <!--Random entry footer-->
                 </Grid.RowDefinitions>
 
+                <!--Reactive button (image of random movie)-->
                 <Button Grid.Row="0" Margin="20,20,0,0" BorderThickness="0,0,0,0" Cursor="Hand"
                         ToolTip="{Binding RandomMovie.Title}" Command="{Binding ViewEntryCommand}" CommandParameter="{Binding RandomMovie.Title}">
                     <Button.Style>
@@ -65,25 +69,31 @@
                     </Button.Background>
                 </Button>
 
+                <!--Random entry footer-->
                 <TextBlock Grid.Row="1" Text="Random Movie" VerticalAlignment="Top" HorizontalAlignment="Center" Foreground="White" FontSize="20"/>
             </Grid>
 
+            <!--Search, Add and Genres area-->
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="70"/>
-                    <RowDefinition Height="70"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="70"/> <!--Search area-->
+                    <RowDefinition Height="70"/> <!--Add area-->
+                    <RowDefinition Height="*"/> <!--Genres area-->
                 </Grid.RowDefinitions>
 
+                <!--Search area-->
                 <Grid Grid.Row="0">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="100"/> <!--Search label-->
+                        <ColumnDefinition Width="*"/> <!--Search textbox-->
+                        <ColumnDefinition Width="100"/> <!--Search button-->
                     </Grid.ColumnDefinitions>
 
+                    <!--Search label-->
                     <TextBlock Grid.Column="0" Margin="20" Text="Search:" VerticalAlignment="Center" HorizontalAlignment="Center"
                                Foreground="White" FontSize="18" FontWeight="Bold"/>
+                    
+                    <!--Search textbox-->
                     <TextBox x:Name="SearchTextbox" Grid.Column="1" Margin="0,20,10,20" VerticalContentAlignment="Center" Background="#FF1F1D1D"
                              Foreground="White" Padding="4,0,0,0" FontSize="14" BorderThickness="2">
 
@@ -92,19 +102,25 @@
                             <KeyBinding Gesture="Enter" Command="{Binding SearchTitleCommand}" CommandParameter="{Binding Text, ElementName=SearchTextbox}"/>
                         </TextBox.InputBindings>
                     </TextBox>
+                    
+                    <!--Search button-->
                     <Button Grid.Column="2" Margin="10,20,10,20" Content="Search" FontSize="13" Style="{StaticResource RoundedButton}"
                             Command="{Binding SearchTitleCommand}" CommandParameter="{Binding Text, ElementName=SearchTextbox}"/>
                 </Grid>
 
+                <!--Add area-->
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="100"/> <!--Add label-->
+                        <ColumnDefinition Width="*"/> <!--Add textbox-->
+                        <ColumnDefinition Width="100"/> <!--Add button-->
                     </Grid.ColumnDefinitions>
 
+                    <!--Add label-->
                     <TextBlock Grid.Column="0" Margin="20" Text="Add:" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White"
                                FontSize="18" FontWeight="Bold"/>
+
+                    <!--Add textbox-->
                     <TextBox x:Name="AddTextbox" Grid.Column="1" Margin="0,20,10,20" VerticalContentAlignment="Center" Background="#FF1F1D1D"
                              Foreground="White" Padding="4,0,0,0" FontSize="14" FontStyle="Italic" BorderThickness="2">
                         
@@ -113,26 +129,31 @@
                             <KeyBinding Gesture="Enter" Command="{Binding AddMovieCommand}" CommandParameter="{Binding Text, ElementName=AddTextbox}"/>
                         </TextBox.InputBindings>
                     </TextBox>
-                    
+
+                    <!--Add button-->
                     <Button Grid.Column="2" Margin="10,20,10,20" Content="Go" FontSize="13" Style="{StaticResource RoundedButton}"
                             Command="{Binding AddMovieCommand}" CommandParameter="{Binding Text, ElementName=AddTextbox}"/>
                 </Grid>
 
+                <!--Genres area-->
                 <Grid Grid.Row="2">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="30"/> <!--Title-->
+                        <RowDefinition Height="*"/> <!--Genres list-->
                     </Grid.RowDefinitions>
 
+                    <!--Title-->
                     <TextBlock Grid.Row="0" Text="Genres:" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontSize="17"/>
 
+                    <!--Genres list-->
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0.2*"/>
-                            <ColumnDefinition Width="0.6*"/>
-                            <ColumnDefinition Width="0.2*"/>
+                            <ColumnDefinition Width="0.2*"/> <!--Spacing-->
+                            <ColumnDefinition Width="0.6*"/> <!--Listbox-->
+                            <ColumnDefinition Width="0.2*"/> <!--Spacing-->
                         </Grid.ColumnDefinitions>
 
+                        <!--Genres listbox-->
                         <ListBox Grid.Column="1" Margin="20,5,20,20" Background="#FF1F1D1D" Foreground="White" HorizontalContentAlignment="Stretch"
                                  ItemsSource="{Binding GenreList}" ItemTemplate="{StaticResource GenreDatatemplate}" BorderThickness="2" Padding="0,3,0,0" FontSize="13"/>
                     </Grid>
@@ -140,6 +161,7 @@
             </Grid>
         </Grid>
 
+        <!--View All button-->
         <Button Grid.Row="2" Content="View All" Width="190" HorizontalAlignment="Right" Style="{StaticResource RoundedButton}" Command="{Binding GoToViewAllCommand}"/>
     </Grid>
 </UserControl>

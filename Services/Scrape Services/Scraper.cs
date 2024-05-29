@@ -9,7 +9,7 @@ namespace MovieLibrary.Services.Scrape_Services
 
         public Movie ScrapeMovie(string entry_url)
         {
-            HtmlDocument document = _utils.GetDocument(entry_url);
+            HtmlDocument? document = _utils.GetDocument(entry_url);
             Movie returnMovie = new Movie();
 
             if (document == null || !entry_url.Contains("www.imdb.com"))

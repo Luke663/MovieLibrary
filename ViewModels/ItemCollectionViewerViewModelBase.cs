@@ -4,6 +4,8 @@ using System.Windows;
 
 namespace MovieLibrary.ViewModels
 {
+    // Base class of the extracted commonalities between the 'View All' and 'Search Results' pages.
+
     class ItemCollectionViewerViewModelBase : ViewModelBase
     {
         protected readonly LibraryStore _libraryStore;
@@ -13,6 +15,7 @@ namespace MovieLibrary.ViewModels
         protected ObservableCollection<MovieViewModel> _visibleMovies = new ObservableCollection<MovieViewModel>();
         protected ObservableCollection<MovieViewModel>? _preFilterMovies = null;
 
+        // Initial values displayed in dropdown boxes
         protected string _selectedFilter = "All";
         protected string _selectedSorter = "A-Z";
 
@@ -53,26 +56,37 @@ namespace MovieLibrary.ViewModels
         {
             _libraryStore = libraryStore;
 
+            // Initialise sort and filter dropdowns with miminum required fields
             _filters = new List<string>() { "All" };
             _sorters = ["A-Z", "Z-A", "Date ↑", "Date ↓", "Score ↑", "Score ↓"];
         }
 
+        /// <summary>
+        /// Sets the currently visible movies to be either a subset of the full range of entries (all
+        /// for the 'View All' page or a set of search results for the 'Search Results' page) or the full set.
+        /// </summary>
+        /// <param name="filter">Parameter by which movies are filtered.</param>
         protected void FilterResults(string filter)
         {
-            if (filter == "All" && _preFilterMovies != null)
+            if (filter == "All" && _preFilterMovies != null) // Switching back from a filtered set to all
             {
                 VisibleMovies = _preFilterMovies;
                 _preFilterMovies = null;
             }
             else
             {
-                if (_preFilterMovies == null)
+                if (_preFilterMovies == null) // Switching from all entries to a filtered set
                     _preFilterMovies = new ObservableCollection<MovieViewModel>(_visibleMovies);
 
+                // Sets VisibleMovies to a subset of the full range of values
                 VisibleMovies = _preFilterMovies.Where((m) => m.GenreString.Contains(filter)).ToList();
             }
         }
 
+        /// <summary>
+        /// Rearranges the set of currently visible movies via the selected property.
+        /// </summary>
+        /// <param name="sorter">Selected property to filter entries by (Date, title...).</param>
         protected void SortResults(string sorter)
         {
             switch (sorter)

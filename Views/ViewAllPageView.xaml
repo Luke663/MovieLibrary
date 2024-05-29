@@ -8,11 +8,12 @@
     <Grid>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="45" />
-                <RowDefinition Height="0.8*" />
-                <RowDefinition Height="60" />
+                <RowDefinition Height="45" /> <!--Dropdown area-->
+                <RowDefinition Height="0.8*" /> <!--Tile area-->
+                <RowDefinition Height="60" /> <!--Footer-->
             </Grid.RowDefinitions>
 
+            <!--Dropdown area-->
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -20,17 +21,20 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
+                <!--Filter dropdown-->
                 <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="5">
                     <TextBlock Text="Genre: " HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="15" Foreground="White" FontWeight="Bold"/>
                     <ComboBox Margin="5" Width="200" SelectedIndex="0" ItemsSource="{Binding Filters}" SelectedItem="{Binding SelectedFilter}"/>
                 </StackPanel>
 
+                <!--Sort dropdown-->
                 <StackPanel Grid.Column="2" Orientation="Horizontal" Margin="5">
                     <TextBlock Text="Sort by: " HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="15" Foreground="White" FontWeight="Bold"/>
                     <ComboBox Margin="5" Width="200" SelectedIndex="0" ItemsSource="{Binding Sorters}" SelectedItem="{Binding SelectedSorter}"/>
                 </StackPanel>
             </Grid>
 
+            <!--Tile area-->
             <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1">
                 <ItemsControl FlowDirection="LeftToRight" Margin="10" BorderBrush="White" BorderThickness="1"
                               ItemsSource="{Binding VisibleMovies}" ItemTemplate="{StaticResource ViewAllTileTemplate}">
@@ -42,6 +46,7 @@
                 </ItemsControl>
             </ScrollViewer>
 
+            <!--Home button-->
             <Button Grid.Row="2" Content="Home" Width="190" HorizontalAlignment="Right" Style="{StaticResource RoundedButton}" Command="{Binding NavigateHomeCommand}"/>
         </Grid>
     </Grid>

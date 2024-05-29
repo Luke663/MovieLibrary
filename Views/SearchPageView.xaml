@@ -7,11 +7,12 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="45" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="60" />
+            <RowDefinition Height="45" /> <!--Dropdown area-->
+            <RowDefinition Height="*" /> <!--Result area-->
+            <RowDefinition Height="60" /> <!--Footer-->
         </Grid.RowDefinitions>
 
+        <!--Dropdown area-->
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -19,6 +20,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
+            <!--Filter dropdown-->
             <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="5">
                 <TextBlock Text="Genre: " HorizontalAlignment="Center" VerticalAlignment="Center"
                            FontSize="15" Foreground="White" FontWeight="Bold"/>
@@ -26,6 +28,7 @@
                 <ComboBox Margin="5" Width="200" SelectedIndex="0" ItemsSource="{Binding Filters}" SelectedItem="{Binding SelectedFilter}"/>
             </StackPanel>
 
+            <!--Sort dropdown-->
             <StackPanel Grid.Column="2" Orientation="Horizontal" Margin="5">
                 <TextBlock Text="Sort by: " HorizontalAlignment="Center" VerticalAlignment="Center"
                            FontSize="15" Foreground="White" FontWeight="Bold"/>
@@ -34,9 +37,11 @@
             </StackPanel>
         </Grid>
 
+        <!--Search result area-->
         <ListBox Grid.Row="1" Background="Transparent" HorizontalContentAlignment="Stretch"
                  ItemsSource="{Binding VisibleMovies}" ItemTemplate="{StaticResource SearchResultTemplate}"/>
 
+        <!--Home button-->
         <Button Grid.Row="2" Content="Home" Width="190" HorizontalAlignment="Right"
                 Style="{StaticResource RoundedButton}" Command="{Binding NavigateHomeCommand}"/>
     </Grid>

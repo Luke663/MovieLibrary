@@ -8,99 +8,119 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/> <!--Content area-->
         </Grid.RowDefinitions>
 
+        <!--Content area-->
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.3*"/>
-                <ColumnDefinition Width="0.5*"/>
+                <ColumnDefinition Width="0.3*"/> <!--Image, Score, Date and Genres area-->
+                <ColumnDefinition Width="0.5*"/> <!--Duration, Title, Description... area-->
             </Grid.ColumnDefinitions>
 
+            <!--Image, Score, Date and Genres area-->
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="0.7*"/>
-                    <RowDefinition Height="0.35*"/>
+                    <RowDefinition Height="0.7*"/> <!--Image area-->
+                    <RowDefinition Height="0.35*"/> <!--Score, Date and Genres area-->
                 </Grid.RowDefinitions>
 
+                <!--Movie image-->
                 <Image Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Source="{Binding Path}"/>
 
+                <!--Score, Date and Genres-->
                 <Grid Grid.Row="1">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/> <!--Score-->
+                        <RowDefinition Height="*"/> <!--Date label-->
+                        <RowDefinition Height="*"/> <!--Date-->
+                        <RowDefinition Height="*"/> <!--Genres label-->
+                        <RowDefinition Height="*"/> <!--Genres-->
                     </Grid.RowDefinitions>
 
+                    <!--Score-->
                     <Grid Grid.Row="0">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/> <!--Label-->
+                            <ColumnDefinition Width="*"/> <!--Score-->
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Grid.Column="0" Text="Score: " HorizontalAlignment="Right" FontSize="30" Foreground="LawnGreen"/>
                         <TextBlock Grid.Column="1" Text="{Binding Score}" HorizontalAlignment="Left" FontSize="30" Foreground="LawnGreen"/>
                     </Grid>
                     
+                    <!--Date-->
                     <TextBlock Grid.Row="1" Text="Date:" Foreground="Cornsilk" Padding="40,10,0,0" FontSize="17"/>
                     <TextBlock Grid.Row="2" Text="{Binding Date}" HorizontalAlignment="Center" Foreground="Cornsilk" FontSize="14" Padding="0,0,0,0"/>
                     
+                    <!--Genres-->
                     <TextBlock Grid.Row="3" Text="Genres:" Foreground="Cornsilk" Padding="40,10,0,0" FontSize="17"/>
                     <TextBlock Grid.Row="4" Text="{Binding GenreString}" HorizontalAlignment="Center" Foreground="Cornsilk" FontSize="14" Padding="0,0,0,0"/>
                 </Grid>
             </Grid>
 
+            <!--Duration, Title, Description... area-->
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="0.07*"/>
-                    <RowDefinition Height="0.2*"/>
-                    <RowDefinition Height="0.7*"/>
-                    <RowDefinition Height="60"/>
-                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="0.07*"/> <!--Duration/Episodes and rating-->
+                    <RowDefinition Height="0.2*"/> <!--Title-->
+                    <RowDefinition Height="0.7*"/> <!--Description-->
+                    <RowDefinition Height="60"/> <!--Note area-->
+                    <RowDefinition Height="60"/> <!--Button area-->
                 </Grid.RowDefinitions>
 
+                <!--Duration/Episodes-->
                 <TextBlock Grid.Row="0" Text="{Binding Duration}" Foreground="LawnGreen" FontSize="17" FontWeight="Bold"/>
+                <!--Rating-->
                 <TextBlock Grid.Row="0" Text="{Binding AgeRating}" Foreground="Red" FontSize="25" FontWeight="Bold" HorizontalAlignment="Right" Padding="0,0,20,0"/>
 
+                <!--Title-->
                 <Viewbox Stretch="Uniform" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1">
                     <TextBlock Text="{Binding Title}" Margin="5" Foreground="White" FontWeight="Bold"/>
                 </Viewbox>
 
+                <!--Description-->
                 <ScrollViewer Margin="10" Grid.Row="2" Background="#FF1F1D1D" VerticalScrollBarVisibility="Auto" BorderBrush="White" BorderThickness="2">
                     <TextBlock Margin="10" Foreground="White" FontSize="14" Text="{Binding Description}" TextWrapping="Wrap"/>
                 </ScrollViewer>
 
+                <!--Note area-->
                 <Grid Grid.Row="3">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="0.2*"/>
-                        <ColumnDefinition Width="0.8*"/>
-                        <ColumnDefinition Width="0.2*"/>
+                        <ColumnDefinition Width="0.2*"/> <!--Note label-->
+                        <ColumnDefinition Width="0.8*"/> <!--Note textbox-->
+                        <ColumnDefinition Width="0.2*"/> <!--Update note button-->
                     </Grid.ColumnDefinitions>
 
+                    <!--Note label-->
                     <TextBlock Text="Notes:" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="18"/>
-                    
+
+                    <!--Note textbox-->
                     <TextBox Grid.Column="1" Margin="10" Foreground="White" Background="#FF1F1D1D" BorderBrush="White" BorderThickness="2" FontSize="14"
                              Padding="4,0,0,0" VerticalContentAlignment="Center" Text="{Binding Note, UpdateSourceTrigger=PropertyChanged}"/>
-                    
+
+                    <!--Update note button-->
                     <Button Grid.Column="2" Content="Update" FontSize="13"  Style="{StaticResource RoundedButton}"
                             Command="{Binding UpdateNoteCommand}" CommandParameter="{Binding MovieToView}"/>
                 </Grid>
 
+                <!--Button area-->
                 <Grid Grid.Row="5">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="120"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="210"/>
-                        <ColumnDefinition Width="210"/>
+                        <ColumnDefinition Width="120"/> <!--Delete button-->
+                        <ColumnDefinition Width="*"/> <!--Spacing-->
+                        <ColumnDefinition Width="210"/> <!--Back button-->
+                        <ColumnDefinition Width="210"/> <!--Home button-->
                     </Grid.ColumnDefinitions>
 
+                    <!--Delete button-->
                     <Button Grid.Column="0" Content="Delete Entry" Background="Red" FontSize="12.5" Style="{StaticResource RoundedButton}"
                             Command="{Binding DeleteMovieCommand}" CommandParameter="{Binding Title}"/>
 
+                    <!--Back button-->
                     <Button Grid.Column="2" Content="Back" Command="{Binding GoBackCommand}" Style="{StaticResource RoundedButton}"/>
 
+                    <!--Home button-->
                     <Button Grid.Column="3" Content="Home" Command="{Binding NavigateHomeCommand}" Style="{StaticResource RoundedButton}"/>
                 </Grid>
             </Grid>

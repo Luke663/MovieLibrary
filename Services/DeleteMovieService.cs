@@ -4,6 +4,8 @@ using MovieLibrary.Models;
 
 namespace MovieLibrary.Services
 {
+    // Uses an entry's title to find and remove that entry from the database.
+
     internal class DeleteMovieService
     {
         private MovieLibraryDbContextFactory _contextFactory;

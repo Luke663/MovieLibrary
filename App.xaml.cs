@@ -21,7 +21,7 @@ namespace MovieLibrary
                 services.AddSingleton<MovieLibraryDbContextFactory>();
 
                 services.AddSingleton((s) => new Library(s.GetRequiredService<MovieLibraryDbContextFactory>()));
-                services.AddSingleton((s) => new LibraryStore(_host!));
+                services.AddSingleton((s) => new LibraryStore(s.GetRequiredService<Library>()));
 
                 services.AddSingleton<NavigationStore>();
 
@@ -43,6 +43,7 @@ namespace MovieLibrary
             using (MovieLibraryDbContext dbContext = _host.Services.GetRequiredService<MovieLibraryDbContextFactory>().CreateDbContext())
                 dbContext.Database.Migrate();
 
+            // Instatiate Home page
             NavigationStore navigation = _host.Services.GetRequiredService<NavigationStore>();
             navigation.CurrenViewModel = new HomePageViewModel(
                 _host.Services.GetRequiredService<NavigationStore>(),
@@ -62,6 +63,9 @@ namespace MovieLibrary
             base.OnExit(e);
         }
 
+        /// <summary>
+        /// Ensures the picture directory exits.
+        /// </summary>
         private void CheckForPictureDirectory()
         {
             if (!Directory.Exists(Directory.GetCurrentDirectory() + @"\pics"))

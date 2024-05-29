@@ -31,7 +31,10 @@ namespace MovieLibrary.ViewModels
             ViewEntryCommand = new ViewMovieCommand(navigationStore, libraryStore, contextFactory);
             AddMovieCommand = new AddMovieCommand(navigationStore, libraryStore, contextFactory);
 
+            // Get random movie to display
             RandomMovie = _libraryStore.GetSingleEntry();
+
+            // Populate genres listbox
             GenreList = _libraryStore.Genres.OrderBy(g => g.Name).ToList();
         }
     }

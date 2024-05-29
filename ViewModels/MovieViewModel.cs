@@ -3,6 +3,8 @@ using System.IO;
 
 namespace MovieLibrary.ViewModels
 {
+    // Used as the display type for movie objects
+
     class MovieViewModel
     {
         private readonly Movie _movie;

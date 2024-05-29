@@ -120,8 +120,10 @@ namespace MovieLibrary.Services.Scrape_Services
         {
             string imagePath = "pics/" + ValidateFileName(entry_title) + ".jpg";
 
-            WebClient client = new WebClient();
-            client.DownloadFile(imageURL, imagePath);
+            using (WebClient client = new WebClient())
+            {
+                client.DownloadFile(imageURL, imagePath);
+            }
 
             return imagePath;
         }

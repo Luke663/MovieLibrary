@@ -49,14 +49,11 @@
             <!--Overiding of ListBoxItem to allow desired behaviour-->
             <Style TargetType="{x:Type ListBoxItem}">
                 <Style.Resources>
-                    <!-- Use your own colors here if you want, or do it per class -->
-                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#2e2e2e"/>
-                    <!--#FFFFA500"/>-->
-                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey }" Color="#2e2e2e"/>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#FF1F1D1D"/>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey }" Color="#FF1F1D1D"/>
                 </Style.Resources>
 
                 <Setter Property="Template">
-                    <!-- Revert the Template in Windows 10 to match the Windows 7 template that used "SystemColors.HighlightBrushKey" and such-->
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type ListBoxItem}">
                             <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
@@ -122,9 +119,6 @@
                             </Setter>
                         </Style>
                     </Button.Resources>
-
-                    <!--Content-->
-                    <TextBlock Text="{Binding Title}" Visibility="Hidden"/>
 
                     <!--Background Image-->
                     <Button.Background>
