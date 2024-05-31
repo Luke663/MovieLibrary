@@ -67,7 +67,7 @@ This page displays all currently stored entries as tiles (as seen in screenshot 
 ### Requirements:
  - C# support
  - .NETFramework, Version= .NET 8.0
- - Microsoft Visual Studio. This application will be runnable with alternative IDEs, such as Visual Studio Code, or via terminal but has been written and tested using Microsoft Visual Studio so instructions are centered around this.
+ - Microsoft Visual Studio 2022. This application will be runnable with alternative IDEs, such as Visual Studio Code, or via terminal but has been written and tested using Microsoft Visual Studio so instructions are centered around this.
  - NuGet package - HtmlAgilityPack (version 1.11.61)
  - NuGet package - Microsoft.EntityFrameworkCore (version 8.0.4)
  - NuGet package - Microsoft.EntityFrameworkCore.Tools (version 8.0.4)
