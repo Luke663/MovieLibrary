@@ -4,6 +4,8 @@ using MovieLibrary.ViewModels;
 
 namespace MovieLibrary.Services
 {
+    // Called by the MoviePageView, used to update the note field of a particular database entry.
+
     internal class NoteUpdateService
     {
         private readonly MovieLibraryDbContextFactory _dbContextFactory;

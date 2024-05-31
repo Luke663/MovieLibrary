@@ -31,6 +31,9 @@ namespace MovieLibrary.Services.Scrape_Services
             };
         }
 
+        /// <summary>
+        /// Retrieves the entry's duration from the given string.
+        /// </summary>
         public string ExtractDuration(string date_rating_duration)
         {
             Regex r = new Regex(@"([0-9]h\s)?([0-9]{1,2}m)"); // Find mins (42m) or both (1h 42m)
@@ -42,8 +45,7 @@ namespace MovieLibrary.Services.Scrape_Services
         }
 
         /// <summary>
-        /// Retrieves the entry's release date (for simplification this needs to be done
-        /// after duration has been removed from the combined date_rating_duration string).
+        /// Retrieves the entry's release date from the given string.
         /// </summary>
         public string ExtractDate(string date_rating)
         {
@@ -52,33 +54,33 @@ namespace MovieLibrary.Services.Scrape_Services
             return r.Match(date_rating).ToString();
         }
 
-        public string ExtractGenres(string genreText, ref List<string> genres)
+        /// <summary>
+        /// Splits the scraped text (e.g. ActionAdventureMysterySci-Fi) into its
+        /// appropriate form (e.g. Action, Adventure, Mystery, Sci-Fi).
+        /// </summary>
+        /// <param name="genreText">(string) Scraped text.</param>
+        /// <returns>Comma speperated string of genres.</returns>
+        public string ExtractGenres(string genreText)
         {
             string dbText = "";
             string[] alternates = new string[] { "Sci-Fi", "Film-Noir", "Reality-TV", "Game-Show" };
 
-            // To simplify parsing this looks for known variations on the typical capital letter folowed by lower case.
+            // To simplify parsing this looks for known variations on the typical
+            // capital letter folowed by lower case letters caught by the regex below.
             foreach (string alt in alternates)
             {
                 if (genreText.Contains(alt))
                 {
                     dbText = dbText + alt + ", ";
                     genreText = genreText.Replace(alt, "");
-
-                    genres.Add(alt);
                 }
             }
 
-            // Regex to extract each genre (eg Action) adding them to a list for individual processing
-            // and to the entry's own (string) record.
-            Regex r = new Regex(@"[A-Z][a-z]+");
-            MatchCollection matches = r.Matches(genreText);
+            // Regex to extract each genre from the passed text (e.g. ActionAdventureMystery)
+            MatchCollection matches = new Regex(@"[A-Z][a-z]+").Matches(genreText);
 
             foreach (Match match in matches)
-            {
-                genres.Add(match.ToString());
                 dbText = dbText + match.ToString() + ", ";
-            }
 
             return dbText.Trim(new char[] { ' ', ',' });
         }
@@ -92,8 +94,7 @@ namespace MovieLibrary.Services.Scrape_Services
         }
 
         /// <summary>
-        /// Retrieves the desired text from the given document via the given X-Path.
-        /// (replacing characters as needed due to HtmlAgilityPack's formatting)
+        /// Retrieves text from the given document via the given X-Path.
         /// </summary>
         public string ExtractText(HtmlDocument document, string xPath)
         {
@@ -103,31 +104,40 @@ namespace MovieLibrary.Services.Scrape_Services
             return "";
         }
 
+        /// <summary>
+        /// Removes formatting errors created by reading the web page's text from the passed string.
+        /// </summary>
         private string RemoveFormattingErrors(string text)
         {
             return text.Replace("&quot;", "\"").Replace("&#039;", "'").Replace("&mdash;", " - ").Replace("&iuml;", "i").Replace("&#x27;", "'");
         }
 
+        /// <summary>
+        /// Finds the specific URL for the movie's image.
+        /// </summary>
         public string ExtractImageURL(HtmlDocument document, string xPath)
         {
             return document.DocumentNode.SelectSingleNode(xPath).Attributes["src"].Value;
         }
 
         /// <summary>
-        /// Save image file to 'pics' folder, removing invalid characters where needed.
+        /// Save image file to 'pics' folder.
         /// </summary>
         public string DownloadImage(string imageURL, string entry_title)
         {
             string imagePath = "pics/" + ValidateFileName(entry_title) + ".jpg";
 
             using (WebClient client = new WebClient())
-            {
                 client.DownloadFile(imageURL, imagePath);
-            }
 
             return imagePath;
         }
 
+        /// <summary>
+        /// Removes invalid characters from the image filename.
+        /// </summary>
+        /// <param name="filname">Filename to check for invalid characters.</param>
+        /// <returns>(string) Sanitised filename.</returns>
         private string ValidateFileName(string filname)
         {
             char[] restrictedCharacters = new char[] { '<', '>', ':', '\"', '/', '\\', '|', '?', '*' };

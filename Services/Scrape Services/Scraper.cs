@@ -41,10 +41,7 @@ namespace MovieLibrary.Services.Scrape_Services
 
             returnMovie.AgeRating = date_rating_duration;
 
-            List<string> genres = new List<string>();
-            string genres_text = _utils.ExtractText(document, _utils.XPaths["GENRES"]);
-
-            returnMovie.GenreString = _utils.ExtractGenres(genres_text, ref genres);
+            returnMovie.GenreString = _utils.ExtractGenres(_utils.ExtractText(document, _utils.XPaths["GENRES"]));
 
 
             return returnMovie;

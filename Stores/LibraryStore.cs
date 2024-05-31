@@ -25,9 +25,9 @@ namespace MovieLibrary.Stores
             return _library.GetSingleMovie(_movies, desiredEntry);
         }
 
-        public (List<MovieViewModel>, List<string>) GetMovieByTitle(string searchTerm)
+        public (List<MovieViewModel>, List<string>) GetMoviesByTitle(string searchTerm)
         {
-            return _library.GetMovieByTitle(_movies, searchTerm);
+            return _library.GetMoviesByTitle(_movies, searchTerm);
         }
 
         public (List<MovieViewModel>, List<string>) GetMoviesByGenre(string searchTerm)

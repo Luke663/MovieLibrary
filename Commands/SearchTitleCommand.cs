@@ -4,6 +4,8 @@ using MovieLibrary.ViewModels;
 
 namespace MovieLibrary.Commands
 {
+    // Finds movie(s) and their relevant genres in the current library with titles matching/containing the given search term.
+
     class SearchTitleCommand : CommandBase
     {
         private readonly NavigationStore _navigationStore;
@@ -22,7 +24,7 @@ namespace MovieLibrary.Commands
             if (parameter == null) // Error Title not found
                 return;
 
-            (List<MovieViewModel> movies, List<string> filters) = _libraryStore.GetMovieByTitle((string)parameter);
+            (List<MovieViewModel> movies, List<string> filters) = _libraryStore.GetMoviesByTitle((string)parameter);
 
             _navigationStore.CurrenViewModel = new SearchPageViewModel(_navigationStore, _libraryStore, movies, filters, _contextFactory);
         }

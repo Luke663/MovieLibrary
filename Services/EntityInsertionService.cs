@@ -4,6 +4,8 @@ using MovieLibrary.Models;
 
 namespace MovieLibrary.Services
 {
+    // Service used for the database insertion of either Movies or Genres
+
     internal class EntityInsertionService
     {
         private readonly MovieLibraryDbContextFactory _contextFactory;

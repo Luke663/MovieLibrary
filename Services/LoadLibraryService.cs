@@ -4,6 +4,8 @@ using MovieLibrary.Models;
 
 namespace MovieLibrary.Services
 {
+    // Service for loading library; returns either all Movies or all Genres
+
     internal class LoadLibraryService
     {
         private MovieLibraryDbContextFactory _contextFactory;

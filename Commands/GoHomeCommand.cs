@@ -4,6 +4,8 @@ using MovieLibrary.ViewModels;
 
 namespace MovieLibrary.Commands
 {
+    // Switches the current page to the 'Home page'.
+
     class GoHomeCommand : CommandBase
     {
         private readonly NavigationStore _navigationStore;

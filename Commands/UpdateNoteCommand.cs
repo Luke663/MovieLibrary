@@ -18,12 +18,14 @@ namespace MovieLibrary.Commands
 
         public override void Execute(object? parameter)
         {
-            if (parameter == null) // Error no Movie found
+            if (parameter == null) // Error no MovieViewModel found
                 return;
 
+            // Update database
             NoteUpdateService service = new NoteUpdateService(_contextFactory);
             service.UpdateMovie((MovieViewModel)parameter);
 
+            // Update library held in memory
             _libraryStore.UpdateAfterNoteAlteration((MovieViewModel)parameter);
         }
     }

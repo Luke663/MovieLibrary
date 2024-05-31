@@ -4,6 +4,8 @@ using MovieLibrary.ViewModels;
 
 namespace MovieLibrary.Commands
 {
+    // Opens the 'View All' page.
+
     class GoToViewAllCommand : CommandBase
     {
         private readonly NavigationStore _navigationStore;

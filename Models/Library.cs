@@ -13,6 +13,9 @@ namespace MovieLibrary.Models
             _contextFactory = context;
         }
 
+        /// <summary>
+        /// Uses LoadLibraryService to retrieve all database entries for storage in memory.
+        /// </summary>
         public (List<Movie>, List<Genre>) LoadLibrary()
         {
             LoadLibraryService service = new LoadLibraryService(_contextFactory);
@@ -27,9 +30,16 @@ namespace MovieLibrary.Models
             }
         }
 
+        /// <summary>
+        /// Finds a specific movie in the library. Returns random movie if passed title
+        /// is left Null.
+        /// </summary>
+        /// <param name="movies">List of all movies held in memeory.</param>
+        /// <param name="desiredMovie">Title of desired movie or Null for random movie.</param>
+        /// <returns>Movie entity, specific or random.</returns>
         public MovieViewModel GetSingleMovie(IEnumerable<Movie> movies, string? desiredMovie = null)
         {
-            if (movies == null || movies.Count() < 1)
+            if (movies == null || movies.Count() < 1) // Empty library - return blank
                 return new MovieViewModel(new Movie());
 
             if (desiredMovie == null)
@@ -38,7 +48,11 @@ namespace MovieLibrary.Models
                 return new MovieViewModel(movies.First((a) => a.Title == desiredMovie));
         }
 
-        public (List<MovieViewModel>, List<string>) GetMovieByTitle(IEnumerable<Movie> movies, string searchTerm)
+        /// <summary>
+        /// Searches movies held in memory for ones with titles containing the specified parameter. 
+        /// </summary>
+        /// <returns>Tuple: (list of movies contianing search term, list of genres corresponding to found movies)</returns>
+        public (List<MovieViewModel>, List<string>) GetMoviesByTitle(IEnumerable<Movie> movies, string searchTerm)
         {
             List<MovieViewModel> results = new List<MovieViewModel>();
             HashSet<string> filters = new HashSet<string>();
@@ -57,6 +71,9 @@ namespace MovieLibrary.Models
             return (results, filters.ToList<string>());
         }
 
+        /// <summary>
+        /// Find all movies of a specific genre currently in memory.
+        /// </summary>
         public (List<MovieViewModel>, List<string>) GetMovieByGenre(ICollection<Movie> movies, ICollection<Genre> genres, string searchTerm)
         {
             List<MovieViewModel> resultantViewModels = new List<MovieViewModel>();
@@ -70,6 +87,9 @@ namespace MovieLibrary.Models
             return (resultantViewModels, filters.ToList());
         }
 
+        /// <summary>
+        /// Add a movie and its genres to passed lists.
+        /// </summary>
         private void AddMovieAndFilters(List<MovieViewModel> results, HashSet<string> filters, Movie movie)
         {
             results.Add(new MovieViewModel(movie));
@@ -78,6 +98,9 @@ namespace MovieLibrary.Models
                 filters.Add(genre.Name);
         }
 
+        /// <summary>
+        /// Inserts recently scraped movie into memory and updates genres accordingly.
+        /// </summary>
         public void UpdateAfterInsertion(Movie insertedMovie, List<Genre> newGenres, List<Movie> movies, List<Genre> genres)
         {
             movies.Add(insertedMovie);
@@ -91,12 +114,16 @@ namespace MovieLibrary.Models
             }
         }
 
+        /// <summary>
+        /// Remove a deleted movie and its references from memory.
+        /// </summary>
         public void UpdateAfterDeletion(string movieTitle, List<Movie> movies, List<Genre> genres)
         {
             Movie movieToRemove = movies.Find(m => m.Title == movieTitle)!;
 
             movies.Remove(movieToRemove);
 
+            // Check each genre for references of the deleted movie
             for (int i = 0; i < genres.Count; i++)
                 foreach (Movie movie in genres[i].Movies.ToList())
                     if (movie.Title == movieTitle)
@@ -105,7 +132,7 @@ namespace MovieLibrary.Models
 
                         if (genres[i].Movies.Count() < 1)
                         {
-                            GenreDeleteService service = new GenreDeleteService(_contextFactory);
+                            DeletionService service = new DeletionService(_contextFactory);
                             service.DeleteGenre(genres[i].Name);
 
                             genres.RemoveAt(i--);

@@ -27,11 +27,14 @@ namespace MovieLibrary.Commands
             if (parameter == null || messageBoxResult == MessageBoxResult.No)
                 return;
 
-            DeleteMovieService service = new DeleteMovieService(_contextFactory);
-
+            // Update database
+            DeletionService service = new DeletionService(_contextFactory);
             service.DeleteMovie((string)parameter);
+
+            // Update library held in memory
             _libraryStore.UpdateStoreAfterDeletion((string)parameter);
 
+            // Switch back to Home page
             _navigationStore.CurrenViewModel = new HomePageViewModel(_navigationStore, _libraryStore, _contextFactory);
         }
     }

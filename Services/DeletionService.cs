@@ -4,13 +4,13 @@ using MovieLibrary.Models;
 
 namespace MovieLibrary.Services
 {
-    // Uses an entry's title to find and remove that entry from the database.
+    // Uses an entity's title or name to find and remove that entity (Genre or Movie) from the database.
 
-    internal class DeleteMovieService
+    internal class DeletionService
     {
         private MovieLibraryDbContextFactory _contextFactory;
 
-        public DeleteMovieService(MovieLibraryDbContextFactory contextFactory)
+        public DeletionService(MovieLibraryDbContextFactory contextFactory)
         {
             _contextFactory = contextFactory;
         }
@@ -21,6 +21,17 @@ namespace MovieLibrary.Services
             {
                 Movie entry = await context.Movies.Include(m => m.Genres).FirstAsync(m => m.Title == movieTitle);
                 context.Movies.Remove(entry);
+
+                await context.SaveChangesAsync();
+            }
+        }
+
+        public async void DeleteGenre(string genreName)
+        {
+            using (MovieLibraryDbContext context = _contextFactory.CreateDbContext())
+            {
+                Genre genre = context.Genres.FirstOrDefault(g => g.Name == genreName)!;
+                context.Genres.Remove(genre);
 
                 await context.SaveChangesAsync();
             }

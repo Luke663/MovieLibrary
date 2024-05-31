@@ -19,6 +19,7 @@ namespace MovieLibrary.Commands
 
         public override void Execute(object? parameter)
         {
+            // Save current state for use of the 'Back' button
             _navigationStore.savedPreviousPage = _navigationStore.CurrenViewModel;
 
             _navigationStore.CurrenViewModel = new MoviePageViewModel(_libraryStore.GetSingleEntry((string?)parameter), _navigationStore, _libraryStore, _contextFactory);

@@ -4,6 +4,8 @@ using MovieLibrary.ViewModels;
 
 namespace MovieLibrary.Commands
 {
+    // Finds all movies matching the selected genre.
+
     class SearchForGenreCommand : CommandBase
     {
         private readonly NavigationStore _navigationStore;
