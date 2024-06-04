@@ -47,7 +47,8 @@
             </ScrollViewer>
 
             <!--Home button-->
-            <Button Grid.Row="2" Content="Home" Width="190" HorizontalAlignment="Right" Style="{StaticResource RoundedButton}" Command="{Binding NavigateHomeCommand}"/>
+            <Button Grid.Row="2" Content="Home" Width="190" HorizontalAlignment="Right"
+                    Style="{StaticResource RoundedButton}" Command="{Binding NavigateHomeCommand}"/>
         </Grid>
     </Grid>
 </UserControl>

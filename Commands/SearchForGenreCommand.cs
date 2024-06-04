@@ -1,6 +1,7 @@
 ﻿using MovieLibrary.DbContexts;
 using MovieLibrary.Stores;
 using MovieLibrary.ViewModels;
+using System.Windows;
 
 namespace MovieLibrary.Commands
 {
@@ -21,8 +22,11 @@ namespace MovieLibrary.Commands
 
         public override void Execute(object? parameter)
         {
-            if (parameter == null) //Error Genre name not found
+            if (parameter == null || (string)parameter == "")
+            {
+                MessageBox.Show("Error! Genre name not found.");
                 return;
+            }
 
             (List<MovieViewModel> movies, List<string> filters) = _libraryStore.GetMoviesByGenre((string)parameter);
 

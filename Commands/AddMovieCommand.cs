@@ -27,10 +27,13 @@ namespace MovieLibrary.Commands
 
             // Scrape and insert movie into database and update library in memory
             AddMovieService service = new AddMovieService(_contextFactory, _libraryStore);
-            MovieViewModel movie = service.AddMovie((string)parameter).Result;
+            MovieViewModel? movie = service.AddMovie((string)parameter).Result;
 
             if (movie == null) // Error insertion failed
                 return;
+
+            // Save current state for use of the 'Back' button
+            _navigationStore.savedPreviousPage = _navigationStore.CurrenViewModel;
 
             // Switch to view inserted movie
             _navigationStore.CurrenViewModel = new MoviePageViewModel(movie, _navigationStore, _libraryStore, _contextFactory);

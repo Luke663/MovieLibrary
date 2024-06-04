@@ -31,7 +31,7 @@
 
                 <!--Reactive button (image of random movie)-->
                 <Button Grid.Row="0" Margin="20,20,0,0" BorderThickness="0,0,0,0" Cursor="Hand"
-                        ToolTip="{Binding RandomMovie.Title}" Command="{Binding ViewEntryCommand}" CommandParameter="{Binding RandomMovie.Title}">
+                        ToolTip="{Binding RandomMovie.Title}" Command="{Binding ViewEntryCommand}" CommandParameter="{Binding RandomMovie.Id}">
                     <Button.Style>
                         <Style TargetType="Button">
                             <Setter Property="Template">
@@ -61,8 +61,6 @@
                             </Setter>
                         </Style>
                     </Button.Resources>
-
-                    <TextBlock Text="{Binding RandomMovie.Title}" Visibility="Hidden"/>
 
                     <Button.Background>
                         <ImageBrush ImageSource="{Binding RandomMovie.Path}"/>
@@ -162,6 +160,7 @@
         </Grid>
 
         <!--View All button-->
-        <Button Grid.Row="2" Content="View All" Width="190" HorizontalAlignment="Right" Style="{StaticResource RoundedButton}" Command="{Binding GoToViewAllCommand}"/>
+        <Button Grid.Row="2" Content="View All" Width="190" HorizontalAlignment="Right"
+                Style="{StaticResource RoundedButton}" Command="{Binding GoToViewAllCommand}"/>
     </Grid>
 </UserControl>

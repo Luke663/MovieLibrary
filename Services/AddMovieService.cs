@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MovieLibrary.DbContexts;
+using MovieLibrary.Exceptions;
 using MovieLibrary.Models;
 using MovieLibrary.Services.Scrape_Services;
 using MovieLibrary.Stores;
 using MovieLibrary.ViewModels;
+using System.Windows;
 
 namespace MovieLibrary.Services
 {
@@ -23,15 +25,20 @@ namespace MovieLibrary.Services
         /// </summary>
         /// <param name="movieURL">IMDb movie page URL for the desired movie.</param>
         /// <returns>Scraped movie entity in ViewModel form for display.</returns>
-        public async Task<MovieViewModel> AddMovie(string movieURL)
+        public async Task<MovieViewModel?> AddMovie(string movieURL)
         {
             // Assemble new movie entity with scraped information
-            Scraper scraper = new Scraper();
-            Movie movie = scraper.ScrapeMovie(movieURL);
+            Movie? movie = RunScrapeOperation(movieURL);
+
+            if (movie == null)
+                return null;
 
             // Check for duplication
             if (_libraryStore.MovieExists(movie))
-                return _libraryStore.GetSingleEntry(movie.Title);
+            {
+                MessageBox.Show("Movie already exists.");
+                return null;
+            }
 
             // Insert and link database entities
             await InitialiseEntities(movie);
@@ -41,6 +48,32 @@ namespace MovieLibrary.Services
             _libraryStore.UpdateLibraryAfterInsertion(movie, movie.Genres.ToList());
 
             return new MovieViewModel(movie);
+        }
+
+        /// <summary>
+        /// Uses scrape class to create the movie object to be added to the database.
+        /// </summary>
+        private Movie? RunScrapeOperation(string movieURL)
+        {
+            Scraper scraper = new Scraper();
+            Movie movie;
+
+            try
+            {
+                movie = scraper.ScrapeMovie(movieURL)!;
+            }
+            catch (ScrapeFailedException ex)
+            {
+                MessageBox.Show($"Error! Failed to scrape movie.\n\nFailed movie property = {ex.Failure}\nPossible outdated value for Xpath: {ex.Xpath}.");
+                return null;
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Unexpected error occurred during scrape operation.");
+                return null;
+            }
+
+            return movie;
         }
 
         /// <summary>
@@ -70,7 +103,7 @@ namespace MovieLibrary.Services
 
             using (MovieLibraryDbContext context = _dbContextFactory.CreateDbContext())
             {
-                movie = await context.Movies.Include(m => m.Genres).FirstAsync(m => m.Title == movie.Title);
+                movie = await context.Movies.Include(m => m.Genres).FirstAsync(m => m.Id == movie.Id);
 
                 foreach (string genre in movie.GenreString.Split(','))
                     if (genre != "")

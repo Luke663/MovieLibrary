@@ -1,6 +1,7 @@
 ﻿using MovieLibrary.DbContexts;
 using MovieLibrary.Stores;
 using MovieLibrary.ViewModels;
+using System.Windows;
 
 namespace MovieLibrary.Commands
 {
@@ -19,10 +20,18 @@ namespace MovieLibrary.Commands
 
         public override void Execute(object? parameter)
         {
+            MovieViewModel movie = _libraryStore.GetSingleEntry((int?)parameter);
+
+            if (movie.Title == "")
+            {
+                MessageBox.Show("There are no entries available to view.");
+                return;
+            }
+
             // Save current state for use of the 'Back' button
             _navigationStore.savedPreviousPage = _navigationStore.CurrenViewModel;
 
-            _navigationStore.CurrenViewModel = new MoviePageViewModel(_libraryStore.GetSingleEntry((string?)parameter), _navigationStore, _libraryStore, _contextFactory);
+            _navigationStore.CurrenViewModel = new MoviePageViewModel(movie, _navigationStore, _libraryStore, _contextFactory);
         }
     }
 }

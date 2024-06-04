@@ -115,7 +115,7 @@
 
                     <!--Delete button-->
                     <Button Grid.Column="0" Content="Delete Entry" Background="Red" FontSize="12.5" Style="{StaticResource RoundedButton}"
-                            Command="{Binding DeleteMovieCommand}" CommandParameter="{Binding Title}"/>
+                            Command="{Binding DeleteMovieCommand}" CommandParameter="{Binding Id}"/>
 
                     <!--Back button-->
                     <Button Grid.Column="2" Content="Back" Command="{Binding GoBackCommand}" Style="{StaticResource RoundedButton}"/>

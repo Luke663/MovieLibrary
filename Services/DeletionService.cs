@@ -15,11 +15,14 @@ namespace MovieLibrary.Services
             _contextFactory = contextFactory;
         }
 
-        public async void DeleteMovie(string movieTitle)
+        public async void DeleteMovie(int? movieId)
         {
+            if (movieId == null)
+                return;
+
             using (MovieLibraryDbContext context = _contextFactory.CreateDbContext())
             {
-                Movie entry = await context.Movies.Include(m => m.Genres).FirstAsync(m => m.Title == movieTitle);
+                Movie entry = await context.Movies.Include(m => m.Genres).FirstAsync(m => m.Id == movieId);
                 context.Movies.Remove(entry);
 
                 await context.SaveChangesAsync();
@@ -28,6 +31,9 @@ namespace MovieLibrary.Services
 
         public async void DeleteGenre(string genreName)
         {
+            if (genreName == "")
+                return;
+
             using (MovieLibraryDbContext context = _contextFactory.CreateDbContext())
             {
                 Genre genre = context.Genres.FirstOrDefault(g => g.Name == genreName)!;

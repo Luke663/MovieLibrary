@@ -37,15 +37,15 @@ namespace MovieLibrary.Models
         /// <param name="movies">List of all movies held in memeory.</param>
         /// <param name="desiredMovie">Title of desired movie or Null for random movie.</param>
         /// <returns>Movie entity, specific or random.</returns>
-        public MovieViewModel GetSingleMovie(IEnumerable<Movie> movies, string? desiredMovie = null)
+        public MovieViewModel GetSingleMovie(IEnumerable<Movie> movies, int? desiredMovieId = null)
         {
             if (movies == null || movies.Count() < 1) // Empty library - return blank
                 return new MovieViewModel(new Movie());
 
-            if (desiredMovie == null)
+            if (desiredMovieId == null)
                 return new MovieViewModel(movies.ToList()[new Random().Next(0, movies.Count<Movie>())]);
             else
-                return new MovieViewModel(movies.First((a) => a.Title == desiredMovie));
+                return new MovieViewModel(movies.First((a) => a.Id == desiredMovieId));
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace MovieLibrary.Models
             List<Movie> results = ((Genre)(genres.First((m) => m.Name == searchTerm))).Movies.ToList();
 
             foreach (Movie movie in results)
-                AddMovieAndFilters(resultantViewModels, filters, movie);
+                AddMovieAndCompileFilters(resultantViewModels, filters, movie);
 
             return (resultantViewModels, filters.ToList());
         }
@@ -90,7 +90,7 @@ namespace MovieLibrary.Models
         /// <summary>
         /// Add a movie and its genres to passed lists.
         /// </summary>
-        private void AddMovieAndFilters(List<MovieViewModel> results, HashSet<string> filters, Movie movie)
+        private void AddMovieAndCompileFilters(List<MovieViewModel> results, HashSet<string> filters, Movie movie)
         {
             results.Add(new MovieViewModel(movie));
 
@@ -117,16 +117,22 @@ namespace MovieLibrary.Models
         /// <summary>
         /// Remove a deleted movie and its references from memory.
         /// </summary>
-        public void UpdateAfterDeletion(string movieTitle, List<Movie> movies, List<Genre> genres)
+        public void UpdateAfterDeletion(int movieId, List<Movie> movies, List<Genre> genres)
         {
-            Movie movieToRemove = movies.Find(m => m.Title == movieTitle)!;
+            Movie movieToRemove = movies.Find(m => m.Id == movieId)!;
+            string concerningGenres = movieToRemove.GenreString;
 
             movies.Remove(movieToRemove);
 
             // Check each genre for references of the deleted movie
             for (int i = 0; i < genres.Count; i++)
+            {
+                if (!concerningGenres.Contains(genres[i].Name))
+                    continue;
+
                 foreach (Movie movie in genres[i].Movies.ToList())
-                    if (movie.Title == movieTitle)
+                {
+                    if (movie.Id == movieId)
                     {
                         genres[i].Movies.Remove(movie);
 
@@ -140,6 +146,8 @@ namespace MovieLibrary.Models
 
                         break;
                     }
+                }
+            }
         }
     }
 }

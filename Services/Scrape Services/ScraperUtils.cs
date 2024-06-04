@@ -1,6 +1,8 @@
 ﻿using HtmlAgilityPack;
+using MovieLibrary.Exceptions;
 using System.Configuration;
-using System.Net;
+using System.IO;
+using System.Net.Http;
 using System.Text.RegularExpressions;
 
 namespace MovieLibrary.Services.Scrape_Services
@@ -29,6 +31,10 @@ namespace MovieLibrary.Services.Scrape_Services
 
                 ["EPISODES"] = ConfigurationManager.AppSettings.Get("EPISODES")!,
             };
+
+            foreach (string key in XPaths.Keys)
+                if (XPaths[key] == null)
+                    throw new XpathNotFoundException(key);
         }
 
         /// <summary>
@@ -127,10 +133,37 @@ namespace MovieLibrary.Services.Scrape_Services
         {
             string imagePath = "pics/" + ValidateFileName(entry_title) + ".jpg";
 
-            using (WebClient client = new WebClient())
-                client.DownloadFile(imageURL, imagePath);
+            if (File.Exists(imagePath))
+                imagePath = ResolveFilenameConflict(imagePath);
+
+            try
+            {
+                using (var client = new HttpClient())
+                    using (var s = client.GetStreamAsync(imageURL))
+                        using (var fs = new FileStream(imagePath, FileMode.OpenOrCreate))
+                            s.Result.CopyTo(fs);
+            }
+            catch (HttpRequestException) { return ""; }
+            catch (UriFormatException) { return ""; }
+            catch (IOException) { return ""; }
 
             return imagePath;
+        }
+
+        /// <summary>
+        /// Append bracketted numbers to filename to resolve conflicts for
+        /// movies with the same name.
+        /// </summary>
+        /// /// <returns>(string) Unique filename.</returns>
+        private string ResolveFilenameConflict(string filename)
+        {
+            int counter = 2;
+            filename = filename.Replace(".jpg", "");
+
+            while (File.Exists(filename + "(" + counter + ").jpg"))
+                counter++;
+
+            return filename + "(" + counter + ").jpg";
         }
 
         /// <summary>

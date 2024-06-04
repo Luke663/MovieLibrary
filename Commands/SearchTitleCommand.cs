@@ -1,6 +1,7 @@
 ﻿using MovieLibrary.DbContexts;
 using MovieLibrary.Stores;
 using MovieLibrary.ViewModels;
+using System.Windows;
 
 namespace MovieLibrary.Commands
 {
@@ -22,7 +23,10 @@ namespace MovieLibrary.Commands
         public override void Execute(object? parameter)
         {
             if (parameter == null) // Error Title not found
+            {
+                MessageBox.Show("Error! Title is null.");
                 return;
+            }
 
             (List<MovieViewModel> movies, List<string> filters) = _libraryStore.GetMoviesByTitle((string)parameter);
 

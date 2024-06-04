@@ -61,6 +61,7 @@ This page displays all currently stored entries as tiles (as seen in screenshot 
 ### How to use
 - Clone the repository.
 - Find the 'MovieLibrary.sln' file and open the project with Microsoft Visual Studio.
+- Some reference errors may appear but these will disappear after running or re-building the application.
 - Press the play button to build and run the application.
 - Initially the application will be empty but entries can be added via the 'add' textbox on the home page as described above to fill the database with data.
 

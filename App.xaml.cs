@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MovieLibrary.DbContexts;
+using MovieLibrary.Exceptions;
 using MovieLibrary.Models;
 using MovieLibrary.Stores;
 using MovieLibrary.ViewModels;
@@ -38,10 +39,18 @@ namespace MovieLibrary
         {
             CheckForPictureDirectory();
 
-            _host.Start();
+            try
+            {
+                using (MovieLibraryDbContext dbContext = _host.Services.GetRequiredService<MovieLibraryDbContextFactory>().CreateDbContext())
+                    dbContext.Database.Migrate();
+            }
+            catch (InitialisationException ex)
+            {
+                MessageBox.Show(ex.ExceptionType);
+                Application.Current.Shutdown();
+            }
 
-            using (MovieLibraryDbContext dbContext = _host.Services.GetRequiredService<MovieLibraryDbContextFactory>().CreateDbContext())
-                dbContext.Database.Migrate();
+            _host.Start();
 
             // Instatiate Home page
             NavigationStore navigation = _host.Services.GetRequiredService<NavigationStore>();

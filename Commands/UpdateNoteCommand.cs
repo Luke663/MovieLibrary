@@ -23,7 +23,7 @@ namespace MovieLibrary.Commands
 
             // Update database
             NoteUpdateService service = new NoteUpdateService(_contextFactory);
-            service.UpdateMovie((MovieViewModel)parameter);
+            _ = service.UpdateMovie((MovieViewModel)parameter);
 
             // Update library held in memory
             _libraryStore.UpdateAfterNoteAlteration((MovieViewModel)parameter);

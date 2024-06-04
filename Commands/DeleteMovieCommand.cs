@@ -24,15 +24,21 @@ namespace MovieLibrary.Commands
             MessageBoxResult messageBoxResult = MessageBox.Show("Are you sure you want to delete this entry?\nThis cannot be undone.",
                 "Confirm Deletion", MessageBoxButton.YesNo);
 
-            if (parameter == null || messageBoxResult == MessageBoxResult.No)
+            if (messageBoxResult == MessageBoxResult.No)
                 return;
+
+            if (parameter == null)
+            {
+                MessageBox.Show("Error! Entry.Id not found for delete operation.");
+                return;
+            }
 
             // Update database
             DeletionService service = new DeletionService(_contextFactory);
-            service.DeleteMovie((string)parameter);
+            service.DeleteMovie((int)parameter);
 
             // Update library held in memory
-            _libraryStore.UpdateStoreAfterDeletion((string)parameter);
+            _libraryStore.UpdateStoreAfterDeletion((int)parameter);
 
             // Switch back to Home page
             _navigationStore.CurrenViewModel = new HomePageViewModel(_navigationStore, _libraryStore, _contextFactory);

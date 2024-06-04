@@ -89,7 +89,7 @@
             <DataTemplate DataType="{x:Type viewModels:MovieViewModel}" x:Key="ViewAllTileTemplate">
                 <Button Width="140" Height="190" Margin="7" BorderThickness="0,0,0,0" Cursor="Hand" ToolTip="{Binding Title}"
                         Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}, Path=DataContext.ViewMovieCommand}"
-                        CommandParameter="{Binding Title}">
+                        CommandParameter="{Binding Id}">
                     <Button.Style>
                         <Style TargetType="Button">
                             <Setter Property="Template">
@@ -159,7 +159,7 @@
 
                         <ListBoxItem.InputBindings>
                             <MouseBinding Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Path=DataContext.ViewMovieCommand}"
-                                          CommandParameter="{Binding Title}" Gesture="LeftClick"/>
+                                          CommandParameter="{Binding Id}" Gesture="LeftClick"/>
                         </ListBoxItem.InputBindings>
 
                         <Grid Height="120" Margin="-2">

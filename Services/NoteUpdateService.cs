@@ -1,6 +1,7 @@
 ﻿using MovieLibrary.DbContexts;
 using MovieLibrary.Models;
 using MovieLibrary.ViewModels;
+using System.Windows;
 
 namespace MovieLibrary.Services
 {
@@ -19,7 +20,13 @@ namespace MovieLibrary.Services
         {
             using (MovieLibraryDbContext context = _dbContextFactory.CreateDbContext())
             {
-                Movie movieToAlter = context.Movies.FirstOrDefault(m => m.Id == movie.Id)!;
+                Movie? movieToAlter = context.Movies.FirstOrDefault(m => m.Id == movie.Id);
+
+                if (movieToAlter == null)
+                {
+                    MessageBox.Show("Error! Entry not found.");
+                    return;
+                }
 
                 movieToAlter.Note = movie.Note;
 

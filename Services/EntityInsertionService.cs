@@ -15,8 +15,11 @@ namespace MovieLibrary.Services
             _contextFactory = contextFactory;
         }
 
-        public async Task<Movie> InsertMovie(Movie movie)
+        public async Task<Movie?> InsertMovie(Movie movie)
         {
+            if (movie == null)
+                return null;
+
             using (MovieLibraryDbContext context = _contextFactory.CreateDbContext())
             {
                 EntityEntry<Movie> createdResult = await context.Movies.AddAsync(movie);
@@ -26,8 +29,11 @@ namespace MovieLibrary.Services
             }
         }
 
-        public async Task<Genre> InsertGenre(Genre genre)
+        public async Task<Genre?> InsertGenre(Genre genre)
         {
+            if (genre == null)
+                return null;
+
             using (MovieLibraryDbContext context = _contextFactory.CreateDbContext())
             {
                 EntityEntry<Genre> createdResult = await context.Genres.AddAsync(genre);

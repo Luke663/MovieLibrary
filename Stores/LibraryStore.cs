@@ -20,7 +20,7 @@ namespace MovieLibrary.Stores
             (_movies, _genres) = _library.LoadLibrary();
         }
 
-        public MovieViewModel GetSingleEntry(string? desiredEntry = null)
+        public MovieViewModel GetSingleEntry(int? desiredEntry = null)
         {
             return _library.GetSingleMovie(_movies, desiredEntry);
         }
@@ -35,9 +35,9 @@ namespace MovieLibrary.Stores
             return _library.GetMovieByGenre(_movies, _genres, searchTerm);
         }
 
-        public void UpdateStoreAfterDeletion(string movieTitle)
+        public void UpdateStoreAfterDeletion(int movieId)
         {
-            _library.UpdateAfterDeletion(movieTitle, _movies, _genres);
+            _library.UpdateAfterDeletion(movieId, _movies, _genres);
         }
 
         public void UpdateLibraryAfterInsertion(Movie insertedMovie, List<Genre> newGenres)
@@ -52,7 +52,7 @@ namespace MovieLibrary.Stores
 
         public bool MovieExists(Movie movie)
         {
-            return _movies.Find(m => m.Title == movie.Title) != null;
+            return _movies.Find(m => m.Title == movie.Title && m.Date == movie.Date) != null;
         }
     }
 }
